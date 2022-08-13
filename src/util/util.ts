@@ -1,5 +1,6 @@
 import fs from "fs";
-import Jimp = require("jimp");
+// https://www.npmjs.com/package/jimp#module-build
+import Jimp from "jimp/es";
 
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
