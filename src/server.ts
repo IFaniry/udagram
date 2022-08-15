@@ -13,7 +13,6 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
 
-  // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
   // endpoint to filter an image from a public url.
   // IT SHOULD
@@ -26,15 +25,41 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //    image_url: URL of a publicly accessible image
   // RETURNS
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
+  // EXAMPLE
+  //   http://localhost:8082/filteredimage?image_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1605559424843-9e4c228bf1c2
+  app.get( '/filteredimage', async ( req, res ) => {
+    const imageUrl = req.query.image_url;
 
-  /**************************************************************************** */
+    if (!imageUrl) {
+      return res
+        .status(422)
+        .send({ message: 'image_url query parameter is required' });
+    }
 
-  //! END @TODO1
-  
+    try {
+      const filteredpath = await filterImageFromURL(imageUrl);
+
+      res.sendFile(filteredpath);
+
+      deleteLocalFiles();
+    } catch (error) {
+      const errorMessage = error.toString();
+      let errorCode = 500;
+
+      if (error.toString().includes('Unsupported MIME type')) {
+        errorCode = 422;
+      }
+
+      return res
+        .status(errorCode)
+        .send({ message: errorMessage });
+    }
+  } );
+
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
+  app.get( '/', async ( req, res ) => {
+    res.send('try GET /filteredimage?image_url={{}}')
   } );
   
 
