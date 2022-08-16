@@ -1,7 +1,7 @@
 import fs from 'fs';
-import path from 'path';
 // https://www.npmjs.com/package/jimp#module-build
 import Jimp from 'jimp/es';
+import path from 'path';
 
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
@@ -34,23 +34,25 @@ export async function filterImageFromURL(inputURL: string): Promise<string> {
 // useful to cleanup after tasks
 export async function deleteLocalFiles() {
   const tempFolder = path.join(__dirname, 'tmp');
-  
-  await fs.readdir(tempFolder, async (err, files) => {
-    if (err) {
-      console.error(`Could not read the contents of ${tempFolder}`, err);
+
+  await fs.readdir(tempFolder, async (readdirError, files) => {
+    if (readdirError) {
+      // tslint:disable-next-line: no-console
+      console.error(`Could not read the contents of ${tempFolder}`, readdirError);
     }
-    
+
     const filesDeletions = files
-      .map(file => path.resolve(tempFolder, file))
-      .map(file => fs.unlink(
+      .map((file) => path.resolve(tempFolder, file))
+      .map((file) => fs.unlink(
         file,
-        (err) => {
-          if (err) {
+        (unlinkError) => {
+          if (unlinkError) {
+            // tslint:disable-next-line: no-console
             console.error(`${ path.resolve(tempFolder, file) } could not be deleted.`);
           }
-        }
+        },
       ));
-    
+
     await Promise.all(filesDeletions);
   });
 }
