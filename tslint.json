@@ -1,10 +1,18 @@
 {
-    // "defaultSeverity": "error",
-    // "extends": [
-    //     "tslint:recommended"
-    // ],
-    // "jsRules": {},
-    // "rules": {
-    // },
-    // "rulesDirectory": []
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "quotemark": [true, "single"],
+        "max-line-length": [
+        true,
+            {
+                "limit": 120,
+                "ignore-pattern": "//"
+            }
+        ]
+    },
+    "rulesDirectory": []
 }

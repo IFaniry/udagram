@@ -1,6 +1,6 @@
-import express from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import express, { Request, Response } from 'express';
+import { deleteLocalFiles, filterImageFromURL } from './util/util';
 
 (async () => {
 
@@ -8,8 +8,8 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   const app = express();
 
   // Set the network port
-  const port = process.env.PORT || 8082;
-  
+  const port: string = process.env.PORT || '8082';
+
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
 
@@ -27,8 +27,8 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
   // EXAMPLE
   //   http://localhost:8082/filteredimage?image_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1605559424843-9e4c228bf1c2
-  app.get( '/filteredimage', async ( req, res ) => {
-    const imageUrl = req.query.image_url;
+  app.get( '/filteredimage', async ( req: Request, res: Response ) => {
+    const imageUrl: string = req.query.image_url;
 
     if (!imageUrl) {
       return res
@@ -58,14 +58,15 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( '/', async ( req, res ) => {
+  app.get( '/', async ( _, res: Response ) => {
     res.send('try GET /filteredimage?image_url={{}}')
   } );
-  
 
   // Start the Server
   app.listen( port, () => {
+      // tslint:disable-next-line: no-console
       console.log( `server running http://localhost:${ port }` );
+      // tslint:disable-next-line: no-console
       console.log( `press CTRL+C to stop server` );
   } );
 })();
