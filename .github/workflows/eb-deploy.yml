@@ -19,7 +19,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: eb-artifact
-          path: www/
+          path: www/Archive.zip
           retention-days: 1
 
   deploy:
@@ -33,6 +33,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: eb-artifact
+        path: www
 
     - name: Display structure of downloaded files
       run: ls -R
